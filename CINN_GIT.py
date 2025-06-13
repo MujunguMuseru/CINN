@@ -1,4 +1,3 @@
-###################### Adding Regularization + Using Balanced Datasets + ACE ###############################################
 
 import nni
 import torch
@@ -30,6 +29,7 @@ warnings.filterwarnings("ignore")
 
 logger = logging.getLogger()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
+
 ################################################### Functions and classes ##################################################
 
 def set_random_seed(seed_val):
@@ -251,6 +251,7 @@ def gen_save_feature_attributions(model, X_val_tensor, X_train_tensor, feature_n
     print(f"Attributions saved to: {csv_file_name}")
     
 ################################################ Initialize Stuff ###################################################
+
 random_seed = 18
 set_random_seed(random_seed)
 
@@ -347,10 +348,10 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(X)):
 
     
     # Convert data to PyTorch tensors and move to GPU - might need to change
-    X_train_tensor = torch.tensor(X_train, dtype=torch.float32).to(device)              # inputs - before numpy 
+    X_train_tensor = torch.tensor(X_train, dtype=torch.float32).to(device)              # inputs 
     y_train_tensor = torch.tensor(y_train, dtype=torch.float32).view(-1, 1).to(device)  # targets
-    X_val_tensor = torch.tensor(X_val, dtype=torch.float32).to(device)                  # data - before numpy                                
-    y_val_tensor = torch.tensor(y_val, dtype=torch.float32).view(-1, 1).to(device)      # label - before numpy 
+    X_val_tensor = torch.tensor(X_val, dtype=torch.float32).to(device)                  # data                              
+    y_val_tensor = torch.tensor(y_val, dtype=torch.float32).view(-1, 1).to(device)      # label
 
 
     # Train
@@ -418,7 +419,7 @@ for fold, (train_idx, val_idx) in enumerate(kf.split(X)):
             
         # nni.report_intermediate_result(rmse)
         
-# Compute the averages and store experiment results - we used averages but that can be unsrable and some ppl prefer max or min
+# Compute the averages and store experiment results - we used averages but that can be chaanged to max or min based on preference 
 avg_rmse_loss = np.mean(fold_losses)
 avg_rmse = np.mean(rmse_list)
 avg_r2 = np.mean(r2_list)
